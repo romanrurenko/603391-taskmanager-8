@@ -1,86 +1,36 @@
 import makeFilter from '../src/make-filter';
 import makeTask from '../src/make-task';
+import {filtersData} from './data';
+import {task} from './data';
+import {clearElement} from "./utils";
+import {getRandom} from "./utils";
 
-const boardsContainer = document.querySelector(`.board__tasks`);
+const taskContainer = document.querySelector(`.board__tasks`);
 const filtersContainer = document.querySelector(`.main__filter`);
-const filtersData = [
-  {
-    "caption": `ALL`,
-    "amount": 15,
-    "checked": true
-  },
-  {
-    "caption": `OVERDUE`,
-    "amount": 0,
-    "checked": false
-  },
-  {
-    "caption": `TODAY`,
-    "amount": 0,
-    "checked": false
-  },
-  {
-    "caption": `FAVORITES`,
-    "amount": 15,
-    "checked": false
-  },
-  {
-    "caption": `REPEATING`,
-    "amount": 15,
-    "checked": false
-  },
-  {
-    "caption": `TAGS`,
-    "amount": 15,
-    "checked": false
-  },
-  {
-    "caption": `ARCHIVE`,
-    "amount": 15,
-    "checked": false
-  },
-];
-const boardsData = [
-  {
-    "type": `repeat`,
-    "caption": `It is example of repeating task. It marks by wave.`,
-  },
-];
-
-const getRandom = (min, max) => {
-  return Math.floor(Math.random() * (max - min)) + min;
-};
-
-const clearElement = (element) => {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
-};
 
 const handler = () => {
-  filtersContainer.removeEventListener(`click"`, handler);
-  clearElement(boardsContainer);
-  renderTasks(getRandom(1, 8));
+  clearElement(taskContainer);
+  renderTasks(taskContainer, getRandom(1, 8));
 };
 
-const renderTasks = (count) => {
-  for (let i = 0; i < count; i++) {
-    boardsContainer.insertAdjacentHTML(`beforeend`, makeTask(boardsData[0].type, boardsData[0].caption));
-  }
+const renderTasks = (dist, amount) => {
+  dist.insertAdjacentHTML(`beforeend`, new Array(amount)
+    .fill(makeTask(task))
+    .join(``));
 };
 
-const renderFilters = () => {
-  for (const it of filtersData) {
-    const filtersContainer1 = document.querySelector(`.main__filter`);
-    filtersContainer1.insertAdjacentHTML(`beforeend`, makeFilter(it.caption, it.amount, it.checked));
-
+const renderFilters = (dist, data) => {
+  for (const it of data) {
+    dist.insertAdjacentHTML(`beforeend`, makeFilter(it.caption, it.amount, it.checked));
   }
 };
 
 
 // start script
-clearElement(boardsContainer);
+clearElement(taskContainer);
 clearElement(filtersContainer);
-renderFilters();
-renderTasks(7);
+renderFilters(filtersContainer, filtersData);
+renderTasks(taskContainer, 7);
+
+
 filtersContainer.addEventListener(`click`, handler);
