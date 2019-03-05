@@ -1,6 +1,27 @@
 // make-task.js
+import {formatAMPM} from "./utils";
 
-export default () => `<article class="card card--blue">
+const makeTags = (task) => {
+  const array = [...task.tags];
+  const newArray = array.map((it) => `<span class="card__hashtag-inner">
+                <input
+                  type="hidden"
+                  name="hashtag"
+                  value="${it}"
+                  class="card__hashtag-hidden-input"
+                />
+                <button type="button" class="card__hashtag-name">
+                  #${it}
+                </button>
+                <button type="button" class="card__hashtag-delete">
+                  delete
+                </button>
+              </span>`).join(``);
+  return newArray;
+};
+
+
+export default (task) => `<article class="card card--blue">
   <form class="card__form" method="get">
     <div class="card__inner">
       <div class="card__control">
@@ -30,7 +51,7 @@ export default () => `<article class="card card--blue">
             class="card__text"
             placeholder="Start typing your text here..."
             name="text"
-          ></textarea>
+          >${task.title}</textarea>
         </label>
       </div>
 
@@ -41,13 +62,14 @@ export default () => `<article class="card card--blue">
               date: <span class="card__date-status">no</span>
             </button>
 
-            <fieldset class="card__date-deadline" disabled>
+            <fieldset class="card__date-deadline" >
               <label class="card__input-deadline-wrap">
                 <input
                   class="card__date"
                   type="text"
                   placeholder="23 September"
                   name="date"
+                  value="${new Date(task.dueDate).getDate()} ${[`января`, `февраля`, `марта`, `апреля`, `мая`, `июня`, `июля`, `августа`, `сентября`, `октября`, `ноября`, `декабря`][new Date(task.dueDate).getMonth()].toLowerCase()}"
                 />
               </label>
               <label class="card__input-deadline-wrap">
@@ -56,6 +78,7 @@ export default () => `<article class="card card--blue">
                   type="text"
                   placeholder="11:15 PM"
                   name="time"
+                  value="${formatAMPM(new Date(task.dueDate))}"
                 />
               </label>
             </fieldset>
@@ -142,53 +165,19 @@ export default () => `<article class="card card--blue">
               </div>
             </fieldset>
           </div>
-
+ 
           <div class="card__hashtag">
             <div class="card__hashtag-list">
-              <span class="card__hashtag-inner">
-                <input
-                  type="hidden"
-                  name="hashtag"
-                  value="repeat"
-                  class="card__hashtag-hidden-input"
-                />
-                <button type="button" class="card__hashtag-name">
-                  #repeat
-                </button>
-                <button type="button" class="card__hashtag-delete">
-                  delete
-                </button>
-              </span>
-
-              <span class="card__hashtag-inner">
-                <input
-                  type="hidden"
-                  name="hashtag"
-                  value="repeat"
-                  class="card__hashtag-hidden-input"
-                />
-                <button type="button" class="card__hashtag-name">
-                  #cinema
-                </button>
-                <button type="button" class="card__hashtag-delete">
-                  delete
-                </button>
-              </span>
-
-              <span class="card__hashtag-inner">
-                <input
-                  type="hidden"
-                  name="hashtag"
-                  value="repeat"
-                  class="card__hashtag-hidden-input"
-                />
-                <button type="button" class="card__hashtag-name">
-                  #entertaiment
-                </button>
-                <button type="button" class="card__hashtag-delete">
-                  delete
-                </button>
-              </span>
+            
+            
+            
+            ${ makeTags(task)}
+  
+  
+  
+              
+ 
+              
             </div>
 
             <label>
@@ -208,6 +197,11 @@ export default () => `<article class="card card--blue">
             class="card__img-input visually-hidden"
             name="img"
           />
+            <img
+            src="${task.picture}"
+            alt="task picture"
+            class="card__img"
+            />
         </label>
 
         <div class="card__colors-inner">
