@@ -1,36 +1,35 @@
-import makeFilter from '../src/make-filter';
-import makeTask from '../src/make-task';
-import {filtersData} from './data';
 import {task} from './data';
+import {filtersData} from "./data";
 import {clearElement} from "./utils";
-import {getRandom} from "./utils";
+import {Task} from "./classes/task";
+import {TaskEdit} from "./classes/task-edit";
+import {Filter} from "./classes/filter";
 
 const taskContainer = document.querySelector(`.board__tasks`);
 const filtersContainer = document.querySelector(`.main__filter`);
-
-const handler = () => {
-  clearElement(taskContainer);
-  renderTasks(taskContainer, getRandom(1, 8));
-};
-
-const renderTasks = (dist, amount) => {
-  dist.insertAdjacentHTML(`beforeend`, new Array(amount)
-    .fill(makeTask(task))
-    .join(``));
-};
-
-const renderFilters = (dist, data) => {
-  for (const it of data) {
-    dist.insertAdjacentHTML(`beforeend`, makeFilter(it.caption, it.amount, it.checked));
-  }
-};
-
-
-// start script
 clearElement(taskContainer);
 clearElement(filtersContainer);
-renderFilters(filtersContainer, filtersData);
-renderTasks(taskContainer, 7);
 
+const taskComponent = new Task(task);
+const editTaskComponent = new TaskEdit(task);
 
-filtersContainer.addEventListener(`click`, handler);
+const filtersComponents = [];
+for (let i = 0; i < filtersData.length; i++) {
+  filtersComponents[i] = new Filter(filtersData[i]);
+  filtersContainer.appendChild(filtersComponents[i].render());
+}
+
+taskContainer.appendChild(taskComponent.render());
+
+taskComponent.onEdit = () => {
+  editTaskComponent.render();
+  taskContainer.replaceChild(editTaskComponent.element, taskComponent.element);
+  taskComponent.unrender();
+};
+
+editTaskComponent.onSubmit = () => {
+  taskComponent.render();
+  taskContainer.replaceChild(taskComponent.element, editTaskComponent.element);
+  editTaskComponent.unrender();
+};
+

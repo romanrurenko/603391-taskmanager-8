@@ -19,3 +19,9 @@ export const formatAMPM = (date) => {
   let strTime = hours + `:` + minutes + ` ` + ampm;
   return strTime;
 };
+
+export const createContainer = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};

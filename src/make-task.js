@@ -19,8 +19,6 @@ const makeTags = (task) => {
               </span>`).join(``);
   return newArray;
 };
-
-
 export default (task) => `<article class="card card--blue">
   <form class="card__form" method="get">
     <div class="card__inner">
