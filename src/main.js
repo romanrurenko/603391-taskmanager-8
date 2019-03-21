@@ -7,6 +7,7 @@ import {Filter} from "./classes/filter";
 
 const taskContainer = document.querySelector(`.board__tasks`);
 const filtersContainer = document.querySelector(`.main__filter`);
+
 clearElement(taskContainer);
 clearElement(filtersContainer);
 
