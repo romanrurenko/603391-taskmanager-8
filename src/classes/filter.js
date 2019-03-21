@@ -1,4 +1,4 @@
-import {createContainer} from "../utils";
+import {createElement} from "../utils";
 
 export class Filter {
   constructor(data) {
@@ -37,7 +37,7 @@ export class Filter {
   }
 
   render() {
-    this._element = createContainer(this.template);
+    this._element = createElement(this.template);
     this.bind();
     return this._element;
   }
