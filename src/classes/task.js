@@ -1,5 +1,8 @@
-import {createElement} from "../utils";
 import {Component} from "./component";
+import {Color} from "../data";
+import {moment} from "../main";
+
+
 
 export class Task extends Component {
   constructor(data) {
@@ -10,6 +13,7 @@ export class Task extends Component {
     this._picture = data.picture;
     this._repeatingDays = data.repeatingDays;
     this._onEdit = null;
+
     this._onEditButtonClick = this._onEditButtonClick.bind(this);
   }
 
@@ -27,7 +31,7 @@ export class Task extends Component {
 
   get template() {
     return `
-    <article class="card card--blue ${this._isRepeated() ? `card--repeat` : ``}">
+    <article class="card ${Color[this._color]} ${this._isRepeated() ? `card--repeat` : ``}">
       <div class="card__inner">
         <div class="card__control">
           <button type="button" class="card__btn card__btn--edit">edit</button>
@@ -49,15 +53,26 @@ export class Task extends Component {
   
         <div class="card__settings">
           <div class="card__details">
-            <div class="card__hashtag">
-              <div class="card__hashtag-list">
-                ${(Array.from(this._tags).map((tag) => (`
+          
+          
+              <div class="card__dates">
+                <div class="card__date-deadline">
+                  <span class="card__date">${moment(this._dueDate).format(`Do MMMM`)}</span>
+                </div>
+                <div class="card__input-deadline-wrap">
+                  <span class="card__time">${moment(this._dueDate).format(`h:mm`)}</span>
+                </div>
+              </div>
+              
+                <div class="card__hashtag">
+                  <div class="card__hashtag-list">
+${(Array.from(this._tags).map(tag => (`
                   <span class="card__hashtag-inner">
                     <input type="hidden" name="hashtag" value="${tag}" class="card__hashtag-hidden-input" />
                     <button type="button" class="card__hashtag-name">#${tag}</button>
                     <button type="button" class="card__hashtag-delete">delete</button>
                   </span>`.trim()
-  ))).join(``)}
+    ))).join('')}
               </div>
           </div>
      </article>`.trim();
@@ -68,19 +83,17 @@ export class Task extends Component {
       .addEventListener(`click`, this._onEditButtonClick.bind(this));
   }
 
-  render() {
-    this._element = createElement(this.template);
-    this.bind();
-    return this._element;
-  }
 
   unbind() {
-    // Удаление обработчиков
+    this._element.querySelector(`.card__btn--edit`)
+      .removeEventListener(`click`, this._onEditButtonClick);
   }
 
-  unrender() {
-    this.unbind();
-    this._element = null;
+  update(data) {
+    this._title = data.title;
+    this._tags = data.tags;
+    this._color = data.color;
+    this._repeatingDays = data.repeatingDays;
   }
 
 }
