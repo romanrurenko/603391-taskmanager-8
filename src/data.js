@@ -37,7 +37,7 @@ export const filtersData = [
 ];
 
 // data.js
-export const task = {
+export const taskData = {
   title: [
     `Изучить теорию`,
     `Сделать домашку`,
@@ -67,3 +67,10 @@ export const task = {
 };
 
 
+export const Color = {
+  blue: `card--blue`,
+  black: `card--black`,
+  yellow: `card--yellow`,
+  green: `card--green`,
+  pink: `card--pink`,
+};
